@@ -7,7 +7,7 @@ async_comprehension = __import__('1-async_comprehension').async_comprehension
 
 
 async def measure_runtime():
-    """measure run time of async_comperation function from file 1-async_comprehension.py"""
+    """measure run time of async_comperation function from other file"""
     start = perf_counter()
     await asyncio.gather(async_comprehension(), async_comprehension(),
                          async_comprehension(), async_comprehension())
