@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import unittest
+from unittest.mock import Mock, patch
 from parameterized import parameterized
-access_nested_map = __import__('utils').access_nested_map
+from utils import (access_nested_map, get_json)
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -26,3 +27,20 @@ class TestAccessNestedMap(unittest.TestCase):
         """check if the function raises an exception"""
         with self.assertRaises(exc, msg="KeyError Exception occured"):
             access_nested_map(nested_map, sequence)
+
+
+class TestGetJson(unittest.TestCase):
+    """implement mock testing for api request"""
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io",  {"payload": False})
+        ])
+    def test_get_json(self, test_url, test_payload):
+        """check if utils.get_json returned expected results using mock"""
+        configs = {'return_value.json.return_value': test_payload}
+        patcher = patch('requests.get', **configs)
+        mock = patcher.start()
+        self.assertEqual(get_json(test_url), test_payload)
+        mock.assert_called_once()
+        patcher.stop()
